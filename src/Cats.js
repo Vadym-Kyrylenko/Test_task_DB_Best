@@ -1,32 +1,15 @@
 import React, {Component} from 'react';
 import './Cats.css';
+import { selectedCats } from './selectService';
+import Cat from './Cat';
 
 class Cats extends Component {
-    state = {
-        selectedCat: false
-    };
-
-    setSelectedCat = (id) => {
-        this.setState({selectedCat: id})
-    };
 
     handleSubmit = () => {
-        const catId = this.state.selectedCat;
-        if (catId === false) {
+        if (selectedCats.length === 0) {
             alert('Select a cat!')
         } else {
-            alert(`Cat ID =  ${catId}`)
-        }
-    };
-
-    componentWillMount(){
-        document.addEventListener('click', this.handleClickOutside, false)
-    }
-
-    handleClickOutside = (event) => {
-        if(event.path[0] !== 'cats'){
-            const button = document.querySelector('.button');
-            if (!event.path.includes(button)) this.setState({selectedCat: false})
+            alert(`Selected Cats IDs: ${selectedCats.toString()}`)
         }
     };
 
@@ -36,18 +19,7 @@ class Cats extends Component {
                 {
                     this.props.data && this.props.data.map((item) => {
                         return (
-                            <div
-                                key={item.id} className="cats"
-                                onClick={() => this.setSelectedCat(item.id)}
-                                style={{
-                                    borderStyle: 'solid',
-                                    borderWidth: this.state.selectedCat === item.id ? '3px' : '1px',
-                                    borderColor: this.state.selectedCat === item.id ? 'lawngreen' : '#61dafb',
-                                }}
-                            >
-                                <img src={item.imageUrl} alt={item.name}/>
-                                <p> {item.name} </p>
-                            </div>
+                            <Cat key={item.id} id={item.id} imageUrl={item.imageUrl} name={item.name} />
                         )
                     })
                 }
